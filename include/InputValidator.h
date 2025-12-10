@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// InputValidator class provides validation utilities for user input
+// InputValidator class provides validation 
 class InputValidator {
 public:
     // Email validation
