@@ -23,16 +23,84 @@ static void studentSession(Student& student, RegistrationSystem& regSys) {
     User* userPtr = &student;  // POLYMORPHISM: Base class pointer to derived object
     
     while (inSession) {
-        userPtr->displayMenu(); // RUNTIME POLYMORPHISM: Calls Student::displayMenu()
+        cout << "\n========================================\n";
+        cout << "         STUDENT MENU                   \n";
+        cout << "========================================\n";
+        cout << " 1. View My Information\n";
+        cout << " 2. View My Enrolled Courses\n";
+        cout << " 3. View All Available Courses\n";
+        cout << " 4. Register for a Course\n";
+        cout << " 5. Drop a Course\n";
+        cout << " 6. Logout\n";
+        cout << "========================================\n";
+        cout << "Enter your choice: ";
+        
         string choice;
         getline(cin, choice);
 
         try {
             if (choice == "1") {
+                // View student info
                 student.displayStudentInfo();
+                
             } else if (choice == "2") {
+                // View enrolled courses with details
                 student.displayEnrolledCourses();
+                
+                // Show detailed course information
+                const auto& enrolledCodes = student.getEnrolledCourses();
+                if (!enrolledCodes.empty()) {
+                    cout << "\n--- Course Details ---\n";
+                    for (const auto& code : enrolledCodes) {
+                        const auto& courses = regSys.getCourses();
+                        for (const auto& course : courses) {
+                            if (course.getCode() == code) {
+                                cout << "\nCourse: " << course.getCode() << " - " << course.getTitle() << endl;
+                                cout << "Schedule: " << course.getDayOfWeek() << " " 
+                                     << course.getStartTime() << " - " << course.getEndTime() << endl;
+                                break;
+                            }
+                        }
+                    }
+                }
+                
             } else if (choice == "3") {
+                // View all available courses
+                regSys.listCourses();
+                
+            } else if (choice == "4") {
+                // Register for a course
+                cout << "\n--- Register for Course ---\n";
+                regSys.listCourses();
+                
+                string courseCode = prompt("Enter course code to register: ");
+                
+                try {
+                    regSys.registerForCourse(student, courseCode);
+                    cout << "\n✓ Successfully registered for " << courseCode << "!\n";
+                } catch (const RegistrationException& e) {
+                    cout << "✗ Registration failed: " << e.what() << endl;
+                }
+                
+            } else if (choice == "5") {
+                // Drop a course
+                cout << "\n--- Drop Course ---\n";
+                student.displayEnrolledCourses();
+                
+                if (student.getTotalEnrolledCourses() == 0) {
+                    cout << "You are not enrolled in any courses.\n";
+                } else {
+                    string courseCode = prompt("Enter course code to drop: ");
+                    
+                    try {
+                        regSys.dropCourse(student, courseCode);
+                        cout << "\n✓ Successfully dropped " << courseCode << "!\n";
+                    } catch (const RegistrationException& e) {
+                        cout << "✗ Drop failed: " << e.what() << endl;
+                    }
+                }
+                
+            } else if (choice == "6") {
                 inSession = false;
                 cout << "Logging out...\n";
             } else {
@@ -40,6 +108,8 @@ static void studentSession(Student& student, RegistrationSystem& regSys) {
             }
         } catch (const RegistrationException& e) {
             cout << "Error: " << e.what() << endl;
+        } catch (const exception& e) {
+            cout << "Unexpected error: " << e.what() << endl;
         }
     }
 }
