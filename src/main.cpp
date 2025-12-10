@@ -172,18 +172,27 @@ int main() {
                 string major = prompt("Major: ");
                 double gpa = 0.0;
                 try {
-                    gpa = stod(prompt("GPA (0.0-4.0): "));
+                    string gpaStr = prompt("GPA (0.0-4.0): ");
+                    if (!gpaStr.empty()) {
+                        gpa = stod(gpaStr);
+                    }
                 } catch (...) {
                     gpa = 0.0;
                 }
                 
                 string userID = "U" + to_string(regSys.getStudents().size() + 1);
-                Student& s = regSys.createStudent(username, password, email, name, 
-                                                  userID, studentID, major, gpa);
-                regSys.saveData();
                 
-                cout << "\n✓ Student account created for " << s.getName() << "!\n";
-                cout << "You can now log in.\n";
+                try {
+                    Student& s = regSys.createStudent(username, password, email, name, 
+                                                      userID, studentID, major, gpa);
+                    regSys.saveData();  // Save immediately to file
+                    
+                    cout << "\n✓ Student account created for " << s.getName() << "!\n";
+                    cout << "Username: " << username << endl;
+                    cout << "You can now log in.\n";
+                } catch (const RegistrationException& e) {
+                    cout << "Signup failed: " << e.what() << endl;
+                }
                 
             } else if (choice == "2") {
                 // Student Login
@@ -194,6 +203,8 @@ int main() {
                 Student* s = regSys.login(username, password);
                 if (!s) {
                     cout << "✗ Invalid username or password.\n";
+                    cout << "Debug: Username entered = '" << username << "'\n";
+                    cout << "Debug: Registered students count = " << regSys.getStudents().size() << "\n";
                 } else {
                     cout << "\n✓ Welcome, " << s->getName() << "!\n";
                     cout << "User Type: " << s->getUserType() << endl; // Polymorphism
