@@ -1,0 +1,1 @@
+admin|admin123|admin@university.edu|System Admin|A001|ADMIN

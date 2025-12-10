@@ -3,7 +3,7 @@
 
 #include "Course.h"
 #include "Student.h"
-#include "RegistrationException.h"
+#include "CustomExceptions.h"
 #include <string>
 #include <vector>
 

@@ -1,0 +1,3 @@
+CS101|Intro to Programming|30|Monday|09:00|10:30|
+MATH201|Discrete Mathematics|25|Tuesday|14:00|15:30|
+ENG150|Academic Writing|40|Wednesday|10:00|11:30|
