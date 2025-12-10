@@ -5,7 +5,7 @@
 #include "../include/Admin.h"
 #include "../include/RegistrationSystem.h"
 #include "../include/FileManager.h"
-#include "../include/RegistrationException.h"
+#include "../include/CustomExceptions.h"  
 
 using namespace std;
 
