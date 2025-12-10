@@ -30,4 +30,4 @@ public:
     bool fileExists() const;
 };
 
-#endif // FILEMANAGER_H
+#endif 
